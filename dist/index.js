@@ -6225,7 +6225,7 @@ async function run() {
         const token = core.getInput('access-token');
         const org = core.getInput('organization');
         const environment = core.getInput('environment');
-        const jsonPath = core.getInput('json-Path');
+        const jsonPath = core.getInput('json-path');
         const secret = core.getBooleanInput('secret');
         // open the session
         core.debug(`Opening environment for ${org}/${environment}`);
