@@ -6237,16 +6237,18 @@ async function run() {
         core.debug(`Session values read: ${response}`);
         const jsonData = JSON.parse(response);
         const propertiesData = jsonData.properties;
-        core.debug(`Properties: ${JSON.stringify(propertiesData)}`);
         const jsonProperties = JSON.stringify(propertiesData);
+        core.debug(`Properties: ${jsonProperties}`);
         // use jsonPath to filter results
         if (jsonPath !== '') {
+            core.debug(`Using JSONPath: ${jsonPath}`);
             // Extract values using JSONPath
             // we need to reconvert to a JSON string to do this
             const extractedValues = (0, jsonpath_plus_1.JSONPath)({
                 path: jsonPath,
                 json: jsonProperties
             });
+            core.debug(`Extracted values: ${JSON.stringify(extractedValues)}`);
             if (extractedValues && extractedValues.length > 0) {
                 core.debug(`Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`);
                 if (secret) {

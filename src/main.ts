@@ -51,8 +51,6 @@ export async function run(): Promise<void> {
 
       core.debug(`Extracted values: ${JSON.stringify(extractedValues)}`)
 
-
-
       if (extractedValues && extractedValues.length > 0) {
         core.debug(
           `Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`
