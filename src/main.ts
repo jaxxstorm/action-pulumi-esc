@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { open } from './open'
 import { read } from './read'
-import * as jsonpath from 'jsonpath'
+import { JSONPath } from 'jsonpath-plus'
 
 /**
  * The main function for the action.
@@ -25,7 +25,7 @@ export async function run(): Promise<void> {
     core.debug(`Session values read: ${response}`)
 
     // Extract values using JSONPath
-    const extractedValues = jsonpath.query(response, keys)
+    const extractedValues = JSONPath({ path: keys, json: response })
 
     if (extractedValues && extractedValues.length > 0) {
       core.debug(
