@@ -39,14 +39,13 @@ export async function run(): Promise<void> {
     core.debug(`Properties: ${JSON.stringify(propertiesData)}`)
     const jsonProperties = JSON.stringify(propertiesData)
 
-
     // use jsonPath to filter results
     if (jsonPath !== '') {
       // Extract values using JSONPath
       // we need to reconvert to a JSON string to do this
       const extractedValues = JSONPath({
         path: jsonPath,
-        json: 
+        json: jsonProperties
       })
 
       if (extractedValues && extractedValues.length > 0) {
