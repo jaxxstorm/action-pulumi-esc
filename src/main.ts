@@ -36,6 +36,9 @@ export async function run(): Promise<void> {
 
     const jsonData: RootObject = JSON.parse(response)
     const propertiesData = jsonData.properties
+    core.debug(`Properties: ${JSON.stringify(propertiesData)}`)
+    const jsonProperties = JSON.stringify(propertiesData)
+
 
     // use jsonPath to filter results
     if (jsonPath !== '') {
@@ -43,7 +46,7 @@ export async function run(): Promise<void> {
       // we need to reconvert to a JSON string to do this
       const extractedValues = JSONPath({
         path: jsonPath,
-        json: JSON.stringify(propertiesData)
+        json: 
       })
 
       if (extractedValues && extractedValues.length > 0) {
