@@ -6221,10 +6221,11 @@ const open_1 = __nccwpck_require__(5295);
 async function run() {
     try {
         const token = core.getInput('access-token');
-        const org = core.getInput('org');
+        const org = core.getInput('org-name');
         const environment = core.getInput('environment');
         core.debug(`Opening environment for ${org}/${environment}`);
-        await (0, open_1.open)(token, org, environment);
+        const resp = await (0, open_1.open)(token, org, environment);
+        core.info(`Response received: ${resp}`);
     }
     catch (error) {
         // Fail the workflow run if an error occurs

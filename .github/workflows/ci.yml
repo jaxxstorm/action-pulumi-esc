@@ -52,10 +52,10 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Test Local Action
-        id: test-action
+      - name: Test ESC Action
+        id: open
         uses: ./
         with:
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          org-name: "lbrlabs"
-          environment: "root"
+          organization: lbrlabs
+          environment: root

@@ -8,13 +8,12 @@ import { open } from './open'
 export async function run(): Promise<void> {
   try {
     const token: string = core.getInput('access-token')
-    const org: string = core.getInput('org-name')
+    const org: string = core.getInput('organization')
     const environment: string = core.getInput('environment')
 
     core.debug(`Opening environment for ${org}/${environment}`)
     const resp = await open(token, org, environment)
-    core.info(`Response received: ${resp}`);
-
+    core.info(`Response received: ${resp}`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
