@@ -57,5 +57,5 @@ jobs:
         uses: ./
         with:
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          org: "lbrlabs"
+          org-name: "lbrlabs"
           environment: "root"
