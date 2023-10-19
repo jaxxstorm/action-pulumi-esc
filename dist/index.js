@@ -6226,6 +6226,7 @@ async function run() {
         const org = core.getInput('organization');
         const environment = core.getInput('environment');
         const keys = core.getInput('keys');
+        core.debug(`JSON path keys: ${keys}`);
         // open the session
         core.debug(`Opening environment for ${org}/${environment}`);
         const id = await (0, open_1.open)(token, org, environment);
@@ -6236,6 +6237,8 @@ async function run() {
         core.debug(`Session values read: ${response}`);
         // Extract values using JSONPath
         const extractedValues = (0, jsonpath_plus_1.JSONPath)({ path: keys, json: response });
+        core.debug(`Extracted values using JSONPath: ${extractedValues}`);
+        core.debug(`Lenght of JSONPath: ${extractedValues.length}`);
         if (extractedValues && extractedValues.length > 0) {
             core.debug(`Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`);
             core.setOutput('result', JSON.stringify(extractedValues));

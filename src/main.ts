@@ -14,6 +14,8 @@ export async function run(): Promise<void> {
     const environment: string = core.getInput('environment')
     const keys: string = core.getInput('keys')
 
+    core.debug(`JSON path keys: ${keys}`)
+
     // open the session
     core.debug(`Opening environment for ${org}/${environment}`)
     const id = await open(token, org, environment)
@@ -26,6 +28,8 @@ export async function run(): Promise<void> {
 
     // Extract values using JSONPath
     const extractedValues = JSONPath({ path: keys, json: response })
+    core.debug(`Extracted values using JSONPath: ${extractedValues}`)
+    core.debug(`Lenght of JSONPath: ${extractedValues.length}`)
 
     if (extractedValues && extractedValues.length > 0) {
       core.debug(
