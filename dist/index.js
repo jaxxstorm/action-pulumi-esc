@@ -6245,15 +6245,9 @@ async function run() {
         }
     }
     catch (error) {
-        // Handle specific JSONPath errors (if any specific identification is needed)
-        if (error instanceof Error &&
-            error.message.includes('some substring specific to jsonpath errors')) {
-            core.setFailed(`JSONPath evaluation failed: ${error.message}`);
-        }
-        else if (error instanceof Error) {
-            // Fail the workflow run for other errors
+        // Fail the workflow run if an error occurs
+        if (error instanceof Error)
             core.setFailed(error.message);
-        }
     }
 }
 exports.run = run;
