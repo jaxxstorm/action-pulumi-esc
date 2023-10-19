@@ -59,7 +59,7 @@ jobs:
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           organization: lbrlabs
           environment: action-unit-test
-          json-path: '$.example'
+          json-path: '$'
           secret: false
       - name: Use the plaintext output
         run: |
@@ -71,7 +71,7 @@ jobs:
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           organization: lbrlabs
           environment: action-unit-test
-          json-path: '$.example'
+          json-path: '$'
           secret: true
       - name: Use the output
         run: |
