@@ -33,10 +33,9 @@ export async function run(): Promise<void> {
         `Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`
       )
       if (secret) {
-        core.setSecret(JSON.stringify(extractedValues))
-      } else {
-        core.setOutput('result', JSON.stringify(extractedValues))
+        core.setSecret(extractedValues)
       }
+      core.setOutput('result', JSON.stringify(extractedValues))
     } else {
       core.setFailed(`No values found using the provided JSONPath.`)
     }
