@@ -3,6 +3,14 @@ import { open } from './open'
 import { read } from './read'
 import { JSONPath } from 'jsonpath-plus'
 
+interface IProperties {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  [key: string]: any
+}
+
+interface RootObject {
+  properties: IProperties
+}
 
 /**
  * The main function for the action.
@@ -14,7 +22,6 @@ export async function run(): Promise<void> {
     const org: string = core.getInput('organization')
     const environment: string = core.getInput('environment')
     const jsonPath: string = core.getInput('json-Path')
-    const key: string = core.getInput('key')
     const secret: boolean = core.getBooleanInput('secret')
 
     // open the session
@@ -27,11 +34,17 @@ export async function run(): Promise<void> {
     const response = await read(token, org, environment, id)
     core.debug(`Session values read: ${response}`)
 
+    const jsonData: RootObject = JSON.parse(response)
+    const propertiesData = jsonData.properties
+
     // use jsonPath to filter results
-    if (jsonPath != '') {
+    if (jsonPath !== '') {
       // Extract values using JSONPath
       // we need to reconvert to a JSON string to do this
-      const extractedValues = JSONPath({ path: jsonPath, json: JSON.stringify(propertiesData) })
+      const extractedValues = JSONPath({
+        path: jsonPath,
+        json: JSON.stringify(propertiesData)
+      })
 
       if (extractedValues && extractedValues.length > 0) {
         core.debug(
@@ -45,7 +58,6 @@ export async function run(): Promise<void> {
         core.setFailed(`No values found using the provided JSONPath.`)
       }
     }
-
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
