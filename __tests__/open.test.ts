@@ -5,20 +5,26 @@
 import { open } from '../src/open'
 import { expect } from '@jest/globals'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 
 describe('open.ts', () => {
-  it('should send a POST request to the Pulumi API with the provided token, org, and environment', async () => {
-    const axiosMock = jest
+  it('should send a POST request to the Pulumi API with the correct URL and headers', async () => {
+    const sessionId = uuidv4()
+
+    // Mock axios.post method
+    const axiosPostMock = jest
       .spyOn(axios, 'post')
-      .mockResolvedValueOnce({ data: 'response' })
+      .mockResolvedValueOnce({ status: 200, data: { id: sessionId } })
 
     const token = 'test-token'
     const org = 'test-org'
     const environment = 'test-environment'
 
-    await open(token, org, environment)
+    // Call the open function
+    const result = await open(token, org, environment)
 
-    expect(axiosMock).toHaveBeenCalledWith(
+    // Verify axios.post method was called with the correct arguments
+    expect(axiosPostMock).toHaveBeenCalledWith(
       `https://api.pulumi.com/api/preview/environments/${org}/${environment}/open`,
       {},
       {
@@ -29,19 +35,23 @@ describe('open.ts', () => {
         }
       }
     )
+
+    // Verify the result is the session ID
+    expect(result).toBe(sessionId)
   })
 
-  it('should return a stringified JSON response from the Pulumi API', async () => {
-    const response = { data: 'response' }
-    jest.spyOn(axios, 'post').mockResolvedValueOnce(response)
-
+  it('should return the session ID extracted from the response JSON when the request is successful', async () => {
+    const sessionId = uuidv4()
+    jest
+      .spyOn(axios, 'post')
+      .mockResolvedValueOnce({ data: { id: sessionId }, status: 200 })
     const token = 'test-token'
     const org = 'test-org'
     const environment = 'test-environment'
 
     const result = await open(token, org, environment)
 
-    expect(result).toEqual(JSON.stringify(response.data))
+    expect(result).toBe(sessionId)
   })
 
   it('should handle and throw an error if the request fails due to network issues or invalid credentials', async () => {

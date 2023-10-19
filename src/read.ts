@@ -8,9 +8,8 @@ export async function read(
   sessionId: string
 ): Promise<string> {
   try {
-    const response = await axios.post(
+    const response = await axios.get(
       `https://api.pulumi.com/api/preview/environments/${org}/${environment}/open/${sessionId}`,
-      {},
       {
         headers: {
           Accept: 'application/vnd.pulumi+8',
