@@ -8,7 +8,7 @@ import { open } from './open'
 export async function run(): Promise<void> {
   try {
     const token: string = core.getInput('access-token')
-    const org: string = core.getInput('org')
+    const org: string = core.getInput('org-name')
     const environment: string = core.getInput('environment')
 
     core.debug(`Opening environment for ${org}/${environment}`)
