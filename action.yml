@@ -13,9 +13,9 @@ inputs:
   environment:
     description: 'The Pulumi ESC environment to open'
     required: true
-  keys:
-    description: 'A JSON path expression to determine the ESC keys to return'
-    required: true
+  json-path:
+    description: 'A JSON path expression to determine the ESC keys to return from the values'
+    required: false
   secret:
     description: 'Whether the returned values should be secret'
     default: 'true'

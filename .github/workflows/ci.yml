@@ -59,7 +59,7 @@ jobs:
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           organization: lbrlabs
           environment: action-unit-test
-          keys: '$.properties.environmentVariables.value.EXAMPLE_SETTING.value'
+          keys: '$.example.value.setting.value'
           secret: false
       - name: Use the plaintext output
         run: |
@@ -71,7 +71,7 @@ jobs:
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           organization: lbrlabs
           environment: action-unit-test
-          keys: '$.properties.environmentVariables.value.EXAMPLE_SETTING.value'
+          keys: '$.example.value.setting.value'
           secret: true
       - name: Use the output
         run: |
