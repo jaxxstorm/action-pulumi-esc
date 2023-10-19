@@ -3,6 +3,15 @@ import { open } from './open'
 import { read } from './read'
 import { JSONPath } from 'jsonpath-plus'
 
+interface IProperties {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  [key: string]: any
+}
+
+interface RootObject {
+  properties: IProperties
+}
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -12,8 +21,8 @@ export async function run(): Promise<void> {
     const token: string = core.getInput('access-token')
     const org: string = core.getInput('organization')
     const environment: string = core.getInput('environment')
-    const keys: string = core.getInput('keys')
-    const secret: boolean = core.getInput('secret') === 'true'
+    const jsonPath: string = core.getInput('json-path')
+    const secret: boolean = core.getBooleanInput('secret')
 
     // open the session
     core.debug(`Opening environment for ${org}/${environment}`)
@@ -25,19 +34,34 @@ export async function run(): Promise<void> {
     const response = await read(token, org, environment, id)
     core.debug(`Session values read: ${response}`)
 
-    // Extract values using JSONPath
-    const extractedValues = JSONPath({ path: keys, json: JSON.parse(response) })
+    const jsonData: RootObject = JSON.parse(response)
+    const propertiesData = jsonData.properties
+    const jsonProperties = JSON.stringify(propertiesData)
+    core.debug(`Properties: ${jsonProperties}`)
 
-    if (extractedValues && extractedValues.length > 0) {
-      core.debug(
-        `Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`
-      )
-      if (secret) {
-        core.setSecret(extractedValues)
+    // use jsonPath to filter results
+    if (jsonPath !== '') {
+      core.debug(`Using JSONPath: ${jsonPath}`)
+      // Extract values using JSONPath
+      // we need to reconvert to a JSON string to do this
+      const extractedValues = JSONPath({
+        path: jsonPath,
+        json: jsonProperties
+      })
+
+      core.debug(`Extracted values: ${JSON.stringify(extractedValues)}`)
+
+      if (extractedValues && extractedValues.length > 0) {
+        core.debug(
+          `Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`
+        )
+        if (secret) {
+          core.setSecret(extractedValues)
+        }
+        core.setOutput('result', JSON.stringify(extractedValues))
+      } else {
+        core.setFailed(`No values found using the provided JSONPath.`)
       }
-      core.setOutput('result', JSON.stringify(extractedValues))
-    } else {
-      core.setFailed(`No values found using the provided JSONPath.`)
     }
   } catch (error) {
     // Fail the workflow run if an error occurs
