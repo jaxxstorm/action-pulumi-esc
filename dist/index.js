@@ -6214,6 +6214,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const open_1 = __nccwpck_require__(5295);
+const read_1 = __nccwpck_require__(6666);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -6223,9 +6224,14 @@ async function run() {
         const token = core.getInput('access-token');
         const org = core.getInput('organization');
         const environment = core.getInput('environment');
+        // open the session
         core.debug(`Opening environment for ${org}/${environment}`);
-        const resp = await (0, open_1.open)(token, org, environment);
-        core.info(`Response received: ${resp}`);
+        const id = await (0, open_1.open)(token, org, environment);
+        core.info(`Session opened: ${id}`);
+        // read the session values
+        core.debug(`Reading session values for ${org}/${environment}/${id}`);
+        const response = await (0, read_1.read)(token, org, environment, id);
+        core.info(`Session values read: ${response}`);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
@@ -6284,7 +6290,14 @@ async function open(token, org, environment) {
         });
         core.debug(`Received status code: ${response.status}`);
         core.debug(`Received response: ${JSON.stringify(response.data)}`);
-        return JSON.stringify(response.data);
+        // Parse the returned JSON and extract the 'id' property
+        const data = response.data;
+        if (data.id) {
+            return data.id;
+        }
+        else {
+            throw new Error('No session ID found in the response.');
+        }
     }
     catch (error) {
         // Check the type of error and handle accordingly
@@ -6297,6 +6310,69 @@ async function open(token, org, environment) {
     }
 }
 exports.open = open;
+
+
+/***/ }),
+
+/***/ 6666:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.read = void 0;
+const axios_1 = __importDefault(__nccwpck_require__(8757));
+const core = __importStar(__nccwpck_require__(2186));
+async function read(token, org, environment, sessionId) {
+    try {
+        const response = await axios_1.default.post(`https://api.pulumi.com/api/preview/environments/${org}/${environment}/open/${sessionId}`, {}, {
+            headers: {
+                Accept: 'application/vnd.pulumi+8',
+                'Content-Type': 'application/json',
+                Authorization: `token ${token}`
+            }
+        });
+        core.debug(`Received status code: ${response.status}`);
+        core.debug(`Received response: ${JSON.stringify(response.data)}`);
+        return JSON.stringify(response.data);
+    }
+    catch (error) {
+        // Check the type of error and handle accordingly
+        if (error instanceof Error) {
+            throw new Error(`Error sending request: ${error.message}`);
+        }
+        else {
+            throw new Error('An unexpected error occurred while sending the request.');
+        }
+    }
+}
+exports.read = read;
 
 
 /***/ }),
