@@ -1,4 +1,5 @@
 import axios from 'axios'
+import * as core from '@actions/core'
 
 export async function open(
   token: string,
@@ -17,6 +18,9 @@ export async function open(
         }
       }
     )
+
+    core.debug(`Received status code: ${response.status}`)
+    core.debug(`Received response: ${JSON.stringify(response.data)}`)
 
     return JSON.stringify(response.data)
   } catch (error) {
