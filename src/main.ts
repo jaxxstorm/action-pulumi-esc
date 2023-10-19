@@ -12,8 +12,8 @@ export async function run(): Promise<void> {
     const environment: string = core.getInput('environment')
 
     core.debug(`Opening environment for ${org}/${environment}`)
-    const resp = await open(token, org, environment)
-    core.info(`Response received: ${resp}`)
+    const id = await open(token, org, environment)
+    core.info(`Session opened: ${id}`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
