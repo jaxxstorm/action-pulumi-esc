@@ -52,11 +52,27 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Test ESC Action
-        id: open
+      - name: Plaintext ESC Action
+        id: plaintext
         uses: ./
         with:
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           organization: lbrlabs
           environment: action-unit-test
           keys: '$.properties.environmentVariables.value.EXAMPLE_SETTING.value'
+          secret: false
+      - name: Use the plaintext output
+        run: |
+          echo "The extracted values are: ${{ steps.plaintext.outputs.result }}"
+      - name: Secret ESC Action
+        id: secret
+        uses: ./
+        with:
+          access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          organization: lbrlabs
+          environment: action-unit-test
+          keys: '$.properties.environmentVariables.value.EXAMPLE_SETTING.value'
+          secret: true
+      - name: Use the output
+        run: |
+          echo "The extracted values are: ${{ steps.secret.outputs.result }}"

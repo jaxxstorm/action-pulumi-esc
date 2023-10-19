@@ -16,6 +16,9 @@ inputs:
   keys:
     description: 'A JSON path expression to determine the ESC keys to return'
     required: true
+  secret:
+    description: 'Whether the returned values should be secret'
+    default: 'true'
 
 outputs:
   result:

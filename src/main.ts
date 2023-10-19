@@ -13,6 +13,7 @@ export async function run(): Promise<void> {
     const org: string = core.getInput('organization')
     const environment: string = core.getInput('environment')
     const keys: string = core.getInput('keys')
+    const secret: boolean = core.getInput('secret') === 'true'
 
     // open the session
     core.debug(`Opening environment for ${org}/${environment}`)
@@ -31,7 +32,11 @@ export async function run(): Promise<void> {
       core.debug(
         `Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`
       )
-      core.setOutput('result', JSON.stringify(extractedValues))
+      if (secret) {
+        core.setSecret(JSON.stringify(extractedValues))
+      } else {
+        core.setOutput('result', JSON.stringify(extractedValues))
+      }
     } else {
       core.setFailed(`No values found using the provided JSONPath.`)
     }
