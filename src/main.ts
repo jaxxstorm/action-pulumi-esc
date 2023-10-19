@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { open } from './open'
 import { read } from './read'
+import * as jsonpath from 'jsonpath'
 
 /**
  * The main function for the action.
@@ -11,6 +12,7 @@ export async function run(): Promise<void> {
     const token: string = core.getInput('access-token')
     const org: string = core.getInput('organization')
     const environment: string = core.getInput('environment')
+    const keys: string = core.getInput('keys')
 
     // open the session
     core.debug(`Opening environment for ${org}/${environment}`)
@@ -20,9 +22,29 @@ export async function run(): Promise<void> {
     // read the session values
     core.debug(`Reading session values for ${org}/${environment}/${id}`)
     const response = await read(token, org, environment, id)
-    core.info(`Session values read: ${response}`)
+    core.debug(`Session values read: ${response}`)
+
+    // Extract values using JSONPath
+    const extractedValues = jsonpath.query(response, keys)
+
+    if (extractedValues && extractedValues.length > 0) {
+      core.debug(
+        `Extracted values using JSONPath: ${JSON.stringify(extractedValues)}`
+      )
+      core.setOutput('result', JSON.stringify(extractedValues))
+    } else {
+      core.setFailed(`No values found using the provided JSONPath.`)
+    }
   } catch (error) {
-    // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+    // Handle specific JSONPath errors (if any specific identification is needed)
+    if (
+      error instanceof Error &&
+      error.message.includes('some substring specific to jsonpath errors')
+    ) {
+      core.setFailed(`JSONPath evaluation failed: ${error.message}`)
+    } else if (error instanceof Error) {
+      // Fail the workflow run for other errors
+      core.setFailed(error.message)
+    }
   }
 }

@@ -13,6 +13,13 @@ inputs:
   environment:
     description: 'The Pulumi ESC environment to open'
     required: true
+  keys:
+    description: 'A JSON path expression to determine the ESC keys to return'
+    required: true
+
+outputs:
+  result:
+    description: 'The result of the Pulumi ESC call'
 
 branding:
   icon: "archive"

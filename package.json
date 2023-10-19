@@ -66,10 +66,12 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
-    "axios": "^1.5.1"
+    "axios": "^1.5.1",
+    "jsonpath": "^1.1.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
+    "@types/jsonpath": "^0.2.2",
     "@types/node": "^20.8.6",
     "@types/uuid": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
