@@ -21,7 +21,7 @@ export async function run(): Promise<void> {
     const token: string = core.getInput('access-token')
     const org: string = core.getInput('organization')
     const environment: string = core.getInput('environment')
-    const jsonPath: string = core.getInput('json-Path')
+    const jsonPath: string = core.getInput('json-path')
     const secret: boolean = core.getBooleanInput('secret')
 
     // open the session
