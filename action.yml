@@ -1,18 +1,25 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Use Pulumi ESC Values'
+description: 'Use Pulumi ESC Values in GitHub Actions'
+author: 'jaxxstorm'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  access-token:
+    description: 'The Pulumi access token to use'
     required: true
-    default: '1000'
+  org-name:
+    description: 'The org name to retrieve environments from'
+    required: true
+  environment:
+    description: 'The Pulumi ESC environment to open'
+    required: true
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+
+branding:
+  icon: "archive"
+  color: "green"
 
 runs:
   using: node20

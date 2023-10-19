@@ -1,16 +1,16 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
-  "author": "",
+  "name": "action-pulumi-esc",
+  "description": "Read values from Pulumi ESC in GitHub Actions",
+  "version": "0.0.1",
+  "author": "jaxxstorm",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/jaxxstorm/action-pulumi-esc",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/jaxxstorm/action-pulumi-esc.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/jaxxstorm/action-pulumi-esc/issues"
   },
   "keywords": [
     "actions",
@@ -65,7 +65,8 @@
     ]
   },
   "dependencies": {
-    "@actions/core": "^1.10.1"
+    "@actions/core": "^1.10.1",
+    "axios": "^1.5.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
