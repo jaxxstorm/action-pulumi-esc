@@ -14,9 +14,6 @@ inputs:
     description: 'The Pulumi ESC environment to open'
     required: true
 
-# Define your outputs here.
-outputs:
-
 branding:
   icon: "archive"
   color: "green"
